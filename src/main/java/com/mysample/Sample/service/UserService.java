@@ -15,7 +15,8 @@ public class UserService {
     private JdbcTemplate jdbcTemplate;
 
     public List<User> getAllUsers() {
-        return jdbcTemplate.query("SELECT * FROM user", new BeanPropertyRowMapper<>(User.class));
+        return jdbcTemplate.query("SELECT * FROM user",
+                new BeanPropertyRowMapper<>(User.class));
     }
 
     public void addUser(User user) {
