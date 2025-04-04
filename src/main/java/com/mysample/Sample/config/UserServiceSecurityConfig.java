@@ -15,14 +15,12 @@ public class UserServiceSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/users/get","/users/update","/users/delete/{email}").hasRole("ADMIN") //Only admin can access users endpoints
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
-                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
-                ))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
 
         return http.build();
     }
@@ -30,7 +28,7 @@ public class UserServiceSecurityConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthorityPrefix("ROLE_"); // Ensure Keycloak roles match Spring Security roles
+        converter.setAuthorityPrefix("ROLE_");
         converter.setAuthoritiesClaimName("realm_access.roles");
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
