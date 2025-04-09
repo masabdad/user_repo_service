@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
+
         return userDao.getAllUsers();
     }
 
@@ -72,5 +73,20 @@ public class UserServiceImpl implements UserService {
         userDao.delete(email);
         return ResponseEntity.ok(ApiConstants.USER_DELETED_SUCCESSFULLY);
     }
+
+    @Override
+    public ResponseEntity<User> getUserById(Long id) {
+        try {
+            User user = userDao.getUserById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }
 

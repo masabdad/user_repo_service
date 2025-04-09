@@ -17,4 +17,7 @@ public interface UserService {
     ResponseEntity<String> updateUser(User user);
 
     ResponseEntity<String> deleteUser(String email);
+
+    ResponseEntity<User> getUserById(Long id);
+
 }

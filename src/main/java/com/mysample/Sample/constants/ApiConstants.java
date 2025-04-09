@@ -1,10 +1,12 @@
 package com.mysample.Sample.constants;
 
 public final class ApiConstants {
+    public static final String ADMIN = "admin";
+
     private ApiConstants() {}
 
     // Role names
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_ADMIN = "hasRole('client_admin')";
     public static final String ROLE_USER = "ROLE_USER";
 
     // Messages

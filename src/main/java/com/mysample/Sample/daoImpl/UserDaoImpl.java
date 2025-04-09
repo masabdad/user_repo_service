@@ -3,10 +3,10 @@ package com.mysample.Sample.daoImpl;
 import com.mysample.Sample.dao.UserDao;
 import com.mysample.Sample.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -45,4 +45,19 @@ public class UserDaoImpl implements UserDao {
         String sql = "SELECT * FROM user";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
+    @Override
+    public User userExistsById(Long id) {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), id);
+    }
+    @Override
+    public User getUserById(Long id) {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Return null if no user is found
+        }
+    }
+
 }

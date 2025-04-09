@@ -12,4 +12,7 @@ public interface UserDao {
 
     void delete(String email);
     List<User> getAllUsers();
+   User userExistsById(Long id);
+
+    User getUserById(Long id);
 }

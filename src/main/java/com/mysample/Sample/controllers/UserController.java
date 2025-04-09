@@ -3,6 +3,7 @@ package com.mysample.Sample.controllers;
 import com.mysample.Sample.constants.ApiConstants;
 import com.mysample.Sample.model.User;
 import com.mysample.Sample.service.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,16 +21,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/get")
-    @PreAuthorize(ApiConstants.ROLE_ADMIN)
+    @PreAuthorize("hasRole('client_admin')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
 
     @PostMapping("/add")
-    @PreAuthorize(ApiConstants.ROLE_ADMIN)
+    @RolesAllowed("client_admin")
     public ResponseEntity<String> addUser(@RequestBody User user) {
         return userService.registerUser(user);
     }
@@ -40,15 +40,20 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize(ApiConstants.ROLE_ADMIN)
+    @RolesAllowed({"client_user","client_admin"})
     public ResponseEntity<String> updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 
     @DeleteMapping("/delete/{email}")
-    @PreAuthorize(ApiConstants.ROLE_ADMIN)
+    @RolesAllowed("client_user")
     public ResponseEntity<String> deleteUser(@PathVariable String email) {
         return userService.deleteUser(email);
     }
 
+    @GetMapping("/get/{id}")
+    @RolesAllowed({"client_admin", "client_user"})
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
 }
