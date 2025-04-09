@@ -1,6 +1,5 @@
 package com.mysample.Sample.serviceImpl;
 
-
 import com.mysample.Sample.constants.ApiConstants;
 import com.mysample.Sample.daoImpl.UserDaoImpl;
 import com.mysample.Sample.exceptionHandling.UserAlreadyExistsException;
